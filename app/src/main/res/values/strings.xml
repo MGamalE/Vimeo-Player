@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">VimeoPlayer</string>
-    <string name="media_url_mp3">https://vod-progressive.akamaized.net/exp=1603284868~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F4006%2F18%2F470034460%2F2090750054.mp4~hmac=87bb2fdb85e38c3371c53aa466a5809c90ddab27771125de57a365fa627eb324/vimeo-prod-skyfire-std-us/01/4006/18/470034460/2090750054.mp4</string>
+    <string name="media_url_mp3">https://archive.org/download/Popeye_forPresident/Popeye_forPresident_512kb.mp4</string>
 </resources>
