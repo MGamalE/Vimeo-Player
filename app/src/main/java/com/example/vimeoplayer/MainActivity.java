@@ -5,19 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.util.Util;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private PlayerView playerView;
     private SimpleExoPlayer player;
+    private Button playBtn;
 
     //Release references
-    private boolean playWhenReady = true;
+    private boolean playWhenReady = false; //If true the player auto play the media
     private int currentWindow = 0;
     private long playbackPosition = 0;
 
@@ -28,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Reference exoplayer view
         playerView = findViewById(R.id.video_view);
+        playBtn = findViewById(R.id.button2);
+
+        playBtn.setOnClickListener(this::onClick);
 
     }
 
@@ -50,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         player.seekTo(currentWindow, playbackPosition);
         player.prepare();
     }
+
 
     @SuppressLint("InlinedApi")
     private void hideSystemUi() {
@@ -114,5 +120,10 @@ public class MainActivity extends AppCompatActivity {
             player.release();
             player = null;
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        player.setPlayWhenReady(true);
     }
 }
