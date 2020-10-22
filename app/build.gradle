@@ -38,6 +38,8 @@ dependencies {
     //Full ExoPlayer library
     implementation 'com.google.android.exoplayer:exoplayer:2.12.0'
 
-    implementation 'com.github.HaarigerHarald:android-youtubeExtractor:2.1.0'
-
+    //Retrofit
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 }
