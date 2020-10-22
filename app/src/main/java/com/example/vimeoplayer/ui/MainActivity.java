@@ -1,4 +1,4 @@
-package com.example.vimeoplayer;
+package com.example.vimeoplayer.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.vimeoplayer.R;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -16,7 +17,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private PlayerView playerView;
     private SimpleExoPlayer player;
-    private Button playBtn;
 
     //Release references
     private boolean playWhenReady = false; //If true the player auto play the media
@@ -30,9 +30,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //Reference exoplayer view
         playerView = findViewById(R.id.video_view);
-        playBtn = findViewById(R.id.button2);
+        Button playBtn = findViewById(R.id.button2);
 
-        playBtn.setOnClickListener(this::onClick);
+        playBtn.setOnClickListener(this);
 
     }
 
