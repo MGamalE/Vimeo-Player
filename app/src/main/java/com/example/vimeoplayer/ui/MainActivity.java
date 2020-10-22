@@ -3,11 +3,16 @@ package com.example.vimeoplayer.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.vimeoplayer.R;
+import com.example.vimeoplayer.model.vimeo.VimeoResponse;
+import com.example.vimeoplayer.network.VimeoClientAPI;
+import com.example.vimeoplayer.network.VimeoInterface;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -15,8 +20,24 @@ import com.google.android.exoplayer2.util.Util;
 import com.vimeo.networking.Configuration;
 import com.vimeo.networking.VimeoClient;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = MainActivity.class.getName();
+
+    /**
+     * You have to sign up as developer with vimeo developer dashboard <a href="https://developer.vimeo.com/">the developer console</a>
+     * <p>
+     * VIMEO_ACCESS_TOKEN you can it from <a href="https://developer.vimeo.com/apps/192457#generate_access_token">the developer console</a>
+     */
     private static final String VIMEO_ACCESS_TOKEN = "b45cae7771a62a78b359dd059008a632";
+
+    private static final String VIMDEO_ID = "470951878";
 
     private PlayerView playerView;
     private SimpleExoPlayer player;
@@ -48,8 +69,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         VimeoClient.initialize(configBuilder.build());
     }
 
-    private void createMediaItem() {
-        MediaItem mediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3));
+    private void createMediaItem(String url) {
+        MediaItem mediaItem = MediaItem.fromUri(url);
         player.setMediaItem(mediaItem);
     }
 
@@ -59,13 +80,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         player = new SimpleExoPlayer.Builder(this).build();
         playerView.setPlayer(player);
 
-        //Create media item
-        createMediaItem();
+
+        callVimeoAPIRequest();
 
         //Supply the state information you saved in releasePlayer to your player during initialization.
         player.setPlayWhenReady(playWhenReady);
         player.seekTo(currentWindow, playbackPosition);
         player.prepare();
+    }
+
+    private void callVimeoAPIRequest() {
+        VimeoInterface vimeoInterface = VimeoClientAPI.getClient().create(VimeoInterface.class);
+        vimeoInterface.getVimeoUrlResponse(VIMDEO_ID)
+                .enqueue(new retrofit2.Callback<VimeoResponse>() {
+                    @Override
+                    public void onResponse(@NotNull Call<VimeoResponse> call, @NotNull Response<VimeoResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            //Create media item
+                            if (response.body().getRequest().getFiles().getProgressive().size() > 0)
+                                createMediaItem(response.body().getRequest().getFiles().getProgressive().get(0).getUrl());
+
+                            Log.d(TAG, response.body().getRequest().getFiles().getProgressive().get(0).getUrl());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call<VimeoResponse> call, @NotNull Throwable t) {
+                        Log.e(TAG, Objects.requireNonNull(t.getMessage()));
+
+                    }
+                });
     }
 
 
