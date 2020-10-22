@@ -12,8 +12,11 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.util.Util;
+import com.vimeo.networking.Configuration;
+import com.vimeo.networking.VimeoClient;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String VIMEO_ACCESS_TOKEN = "b45cae7771a62a78b359dd059008a632";
 
     private PlayerView playerView;
     private SimpleExoPlayer player;
@@ -34,6 +37,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         playBtn.setOnClickListener(this);
 
+        //Build vimeo configuration
+        configVimeoClient();
+    }
+
+    private void configVimeoClient() {
+        Configuration.Builder configBuilder =
+                new Configuration.Builder(MainActivity.VIMEO_ACCESS_TOKEN) //Pass app access token
+                        .setCacheDirectory(this.getCacheDir());
+        VimeoClient.initialize(configBuilder.build());
     }
 
     private void createMediaItem() {
